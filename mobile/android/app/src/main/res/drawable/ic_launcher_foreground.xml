@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Background circle -->
+    <path
+        android:fillColor="#CC0000"
+        android:pathData="M54,54m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0" />
+    <!-- Letter K in white -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,36v36h6V59.8l10.2,12.2h7.6L50,55.2l12.5,-19.2h-6.9L46,51.2V36z" />
+</vector>
