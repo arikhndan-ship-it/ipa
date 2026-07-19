@@ -1,0 +1,104 @@
+workflows:
+  ios-app:
+    name: Khandan iOS App
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+      vars:
+        APP_STORE_APP_ID: 'com.khandan.telegraph'
+        # 🚨 Replace these with your actual Apple credentials in CodeMagic UI:
+        # APP_STORE_CONNECT_ISSUER_ID
+        # APP_STORE_CONNECT_KEY_IDENTIFIER
+        # APP_STORE_CONNECT_PRIVATE_KEY
+        # CERTIFICATE_PRIVATE_KEY
+        # Also add your FCM_SERVER_KEY in CodeMagic environment variables
+    triggering:
+      events:
+        - push
+        - tag
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
+    working_directory: mobile
+    scripts:
+      - name: Flutter pub get
+        script: flutter pub get
+      - name: Install iOS Pods
+        script: |
+          cd ios
+          pod repo update
+          pod install --repo-update
+      - name: Flutter build iOS
+        script: flutter build ios --release --no-codesign
+      - name: Build IPA with xcodebuild
+        script: |
+          cd ios
+          xcodebuild -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -sdk iphoneos \
+            -configuration release \
+            -archivePath $CM_BUILD_DIR/Runner.xcarchive \
+            -allowProvisioningUpdates \
+            archive
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/Runner.xcarchive \
+            -exportPath $CM_BUILD_DIR/ipa \
+            -exportOptionsPlist $CM_BUILD_DIR/mobile/ios/export_options.plist \
+            -allowProvisioningUpdates
+    artifacts:
+      - $CM_BUILD_DIR/ipa/*.ipa
+      - $CM_BUILD_DIR/**/Runner.xcarchive
+    publishing:
+      email:
+        recipients:
+          - khhandantelegraph@gmail.com
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: $APP_STORE_CONNECT_API_KEY
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+  android-app:
+    name: Khandan Android App
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      vars:
+        # 🚨 Add these in CodeMagic UI:
+        # FCM_SERVER_KEY
+        # ANDROID_KEYSTORE_BASE64
+        # ANDROID_KEYSTORE_PASSWORD
+        # ANDROID_KEY_PASSWORD
+        # ANDROID_KEY_ALIAS
+    triggering:
+      events:
+        - push
+        - tag
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
+    working_directory: mobile
+    scripts:
+      - name: Flutter pub get
+        script: flutter pub get
+      - name: Build APK
+        script: flutter build apk --release
+      - name: Build AAB
+        script: flutter build appbundle --release
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/bundle/release/*.aab
+    publishing:
+      email:
+        recipients:
+          - khhandantelegraph@gmail.com
+        notify:
+          success: true
+          failure: true
