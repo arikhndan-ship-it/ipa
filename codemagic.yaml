@@ -3,8 +3,6 @@ workflows:
     name: Khandan iOS App
     max_build_duration: 120
     instance_type: mac_mini_m2
-    integrations:
-      app_store_connect: khandan-appstore
     environment:
       flutter: stable
       xcode: latest
@@ -33,10 +31,6 @@ workflows:
       - build/ios/ipa/*.ipa
       - build/ios/archive/*.xcarchive
     publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
-        submit_to_app_store: false
       email:
         recipients:
           - khhandantelegraph@gmail.com
