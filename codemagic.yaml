@@ -27,26 +27,11 @@ workflows:
           cd ios
           pod repo update
           pod install --repo-update
-      - name: Flutter build iOS
-        script: flutter build ios --release --no-codesign
-      - name: Build IPA with xcodebuild
-        script: |
-          cd ios
-          xcodebuild -workspace Runner.xcworkspace \
-            -scheme Runner \
-            -sdk iphoneos \
-            -configuration release \
-            -archivePath $CM_BUILD_DIR/Runner.xcarchive \
-            -allowProvisioningUpdates \
-            archive
-          xcodebuild -exportArchive \
-            -archivePath $CM_BUILD_DIR/Runner.xcarchive \
-            -exportPath $CM_BUILD_DIR/ipa \
-            -exportOptionsPlist $CM_BUILD_DIR/mobile/ios/export_options.plist \
-            -allowProvisioningUpdates
+      - name: Build IPA
+        script: flutter build ipa --release --export-options-plist ios/export_options.plist
     artifacts:
-      - $CM_BUILD_DIR/ipa/*.ipa
-      - $CM_BUILD_DIR/**/Runner.xcarchive
+      - build/ios/ipa/*.ipa
+      - build/ios/archive/*.xcarchive
     publishing:
       app_store_connect:
         auth: integration
