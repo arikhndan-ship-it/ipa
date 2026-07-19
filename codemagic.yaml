@@ -3,17 +3,13 @@ workflows:
     name: Khandan iOS App
     max_build_duration: 120
     instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: khandan-appstore
     environment:
       flutter: stable
       xcode: latest
       vars:
         APP_STORE_APP_ID: 'com.khandan.telegraph'
-        # 🚨 Replace these with your actual Apple credentials in CodeMagic UI:
-        # APP_STORE_CONNECT_ISSUER_ID
-        # APP_STORE_CONNECT_KEY_IDENTIFIER
-        # APP_STORE_CONNECT_PRIVATE_KEY
-        # CERTIFICATE_PRIVATE_KEY
-        # Also add your FCM_SERVER_KEY in CodeMagic environment variables
     triggering:
       events:
         - push
@@ -52,6 +48,10 @@ workflows:
       - $CM_BUILD_DIR/ipa/*.ipa
       - $CM_BUILD_DIR/**/Runner.xcarchive
     publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
       email:
         recipients:
           - khhandantelegraph@gmail.com
