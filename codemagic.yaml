@@ -59,7 +59,7 @@ workflows:
           success: true
           failure: true
       app_store_connect:
-        auth: $APP_STORE_CONNECT_API_KEY
+        auth: integrations
         submit_to_testflight: true
         submit_to_app_store: false
 
