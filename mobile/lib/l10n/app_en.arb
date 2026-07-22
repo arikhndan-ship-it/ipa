@@ -82,5 +82,6 @@
   "notifications": "Notifications",
   "noNotifications": "No notifications yet",
   "errorLoading": "Failed to load content",
-  "notificationOpened": "Notification opened"
+  "notificationOpened": "Notification opened",
+  "backToHome": "Back to Home"
 }

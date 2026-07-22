@@ -82,5 +82,6 @@
   "notifications": "ئاگادارییەکان",
   "noNotifications": "هێشتا هیچ ئاگادارییەک نییە",
   "errorLoading": "بارکردنی ناوەڕۆک سەرکەوتوو نەبوو",
-  "notificationOpened": "ئاگادارییەکە کرایەوە"
+  "notificationOpened": "ئاگادارییەکە کرایەوە",
+  "backToHome": "گەڕانەوە بۆ سەرەتا"
 }

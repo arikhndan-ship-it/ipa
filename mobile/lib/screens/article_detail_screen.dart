@@ -139,6 +139,11 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.home, color: AppTheme.primaryColor),
+          onPressed: () => Navigator.of(context).pop(),
+          tooltip: l10n.backToHome,
+        ),
         title: Image.asset(
           Localizations.localeOf(context).languageCode == 'ckb'
               ? 'assets/images/logo-ckb.png'
@@ -295,8 +300,8 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
                   const SizedBox(height: 16),
 
                   // Article Body
-                  Text(
-                    article.body,
+                  SelectableText(
+                    _stripHtml(article.body),
                     style: const TextStyle(
                       fontSize: 15,
                       height: 1.7,
@@ -477,6 +482,18 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
     } catch (_) {
       return dateStr;
     }
+  }
+
+  String _stripHtml(String html) {
+    return html
+        .replaceAll(RegExp(r'<[^>]*>'), '')
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#39;', "'")
+        .trim();
   }
 }
 
